@@ -10,6 +10,7 @@
       --card-bg: #11282a;
       --card-border: #1a3f42;
       --accent-green: #00d284;
+      --accent-blue: #2196f3;
       --text-main: #ffffff;
       --text-muted: #8ab4f8;
     }
@@ -51,18 +52,23 @@
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    /* Modals / Popups */
-    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 200; justify-content: center; align-items: center; }
-    .modal-content { background: var(--card-bg); width: 90%; max-width: 360px; padding: 20px; border-radius: 16px; border: 1px solid var(--card-border); text-align: center; position: relative; }
+    /* Modals */
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 200; justify-content: center; align-items: center; overflow-y: auto; }
+    .modal-content { background: var(--card-bg); width: 92%; max-width: 400px; padding: 20px; border-radius: 16px; border: 1px solid var(--card-border); text-align: center; position: relative; margin: 20px auto; }
     .close-modal { position: absolute; top: 12px; right: 15px; background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
-    
-    /* Minting Quantity Box */
-    .minting-box { background: #0b1c1d; border: 1px solid var(--card-border); border-radius: 12px; padding: 12px; margin: 12px 0; display: flex; align-items: center; gap: 12px; text-align: left; }
-    .return-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin: 12px 0; }
-    .return-box { background: #0b1c1d; border: 1px solid var(--card-border); border-radius: 8px; padding: 8px 4px; font-size: 11px; color: #a0aec0; }
-    .return-box div:last-child { color: var(--accent-green); font-weight: bold; font-size: 12px; margin-top: 3px; }
 
-    /* QR Code and Wallet Display */
+    /* Buy AI Energy Layout Styles */
+    .tier-box { background: #0e2022; border: 1px solid var(--card-border); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; text-align: left; cursor: pointer; }
+    .tier-box.selected { border-color: var(--accent-blue); background: rgba(33, 150, 243, 0.1); }
+    .tier-num { background: #1a3f42; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; margin-right: 8px; }
+    
+    .input-amount-box { background: #0b1c1d; border: 1px solid var(--card-border); border-radius: 10px; padding: 12px; margin: 12px 0; display: flex; align-items: center; gap: 10px; }
+    .input-amount-box input { background: transparent; border: none; color: white; font-size: 16px; width: 100%; outline: none; }
+
+    .return-grid-white { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin: 12px 0; }
+    .return-card-w { background: #0b1c1d; border: 1px solid var(--card-border); border-radius: 8px; padding: 8px 4px; font-size: 11px; color: #a0aec0; }
+    .return-card-w div:last-child { color: var(--accent-green); font-weight: bold; font-size: 12px; margin-top: 3px; }
+
     .qr-container { background: white; padding: 10px; border-radius: 12px; display: inline-block; margin: 10px 0; }
     .wallet-box { background: #0b1c1d; border: 1px solid var(--card-border); border-radius: 8px; padding: 10px; font-family: monospace; font-size: 11px; word-break: break-all; color: var(--text-main); margin: 10px 0; text-align: left; position: relative; }
     .copy-btn { background: #1a3f42; border: none; color: white; padding: 4px 8px; border-radius: 6px; font-size: 10px; cursor: pointer; float: right; }
@@ -75,7 +81,7 @@
     <div class="badge">👤 Affiliate marketer</div>
     <div class="earned-box">
       <span style="font-size: 12px; color: #a0aec0;">You Earned:</span>
-      <span style="color: var(--accent-green); font-weight: bold;">🟢 0.000</span>
+      <span style="color: var(--accent-green); font-weight: bold;" id="earned-balance">🟢 0.000</span>
       <button class="btn-withdraw" onclick="alert('No earnings available to withdraw yet.')">Withdraw ></button>
     </div>
   </div>
@@ -84,12 +90,12 @@
   <div id="tab-home" class="tab-content active">
     <div class="main-card">
       <div class="title-orange">🔥 (USDT Trade Rights)</div>
-      <div class="balance-val">₮ 0.000</div>
-      <div class="daily-earn">Daily Earn: $0.00 (0.00%)</div>
-      <div class="settlement">Status: Ready to deposit</div>
+      <div class="balance-val" id="display-balance">₮ 0.000</div>
+      <div class="daily-earn" id="display-daily">Daily Earn: $0.00 (0.00%)</div>
+      <div class="settlement" id="display-status">Status: Ready to deposit</div>
 
       <div class="action-grid">
-        <button class="btn-action btn-topup" onclick="openMintingModal()">🔥 Top up</button>
+        <button class="btn-action btn-topup" onclick="openBuyEnergyModal()">🔥 Top up</button>
         <button class="btn-action btn-refer" onclick="switchTab('friends')">Refer & Earn</button>
       </div>
     </div>
@@ -104,7 +110,7 @@
       <div class="trade-item">
         <div class="trade-top">
           <span>ONDO/USDT <span style="color:var(--accent-green); font-size:11px; background:#0b1c1d; padding:2px 6px; border-radius:4px;">short x15</span></span>
-          <span class="trade-percentage">0.00%</span>
+          <span class="trade-percentage" id="trade-pct">0.00%</span>
         </div>
         <div class="trade-details">
           <span>Entry Price: --</span>
@@ -150,32 +156,40 @@
     </div>
   </div>
 
-  <!-- STEP 1: MINTING / QUANTITY SELECTION MODAL -->
-  <div id="mintingModal" class="modal">
+  <!-- STEP 1: BUY AI ENERGY LAYOUT MODAL -->
+  <div id="buyEnergyModal" class="modal">
     <div class="modal-content">
-      <button class="close-modal" onclick="closeModal('mintingModal')">&times;</button>
-      <h3 style="margin-top:5px; font-size:16px;">You want to buy the quantity</h3>
+      <button class="close-modal" onclick="closeModal('buyEnergyModal')">&times;</button>
+      <h3 style="margin-top:0; font-size:16px; text-align:left; color:#a0aec0;">📈 Daily Return Tiers</h3>
       
-      <div class="minting-box">
-        <div style="background:#00d284; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#0b1c1d; font-size:14px;">₮</div>
-        <div style="text-align:left;">
-          <div style="font-size:11px; color:#a0aec0;">Asset Package</div>
-          <div style="font-weight:bold; color:var(--accent-green); font-size:13px;">Minting 2 USDT</div>
-        </div>
+      <!-- Tiers Selection -->
+      <div class="tier-box selected" onclick="setTierAmount(1, 5.5)">
+        <div style="display:flex; align-items:center;"><div class="tier-num">1</div> <div><div style="font-size:11px; color:#a0aec0;">Amount</div><div style="font-weight:bold; font-size:13px;">>= $0</div></div></div>
+        <div style="text-align:right;"><div style="font-size:11px; color:#a0aec0;">Return</div><div style="color:var(--accent-green); font-weight:bold;">5.5%</div></div>
+      </div>
+      <div class="tier-box" onclick="setTierAmount(20, 6.0)">
+        <div style="display:flex; align-items:center;"><div class="tier-num">2</div> <div><div style="font-size:11px; color:#a0aec0;">Amount</div><div style="font-weight:bold; font-size:13px;">>= $20</div></div></div>
+        <div style="text-align:right;"><div style="font-size:11px; color:#a0aec0;">Return</div><div style="color:var(--accent-green); font-weight:bold;">6.0%</div></div>
+      </div>
+      <div class="tier-box" onclick="setTierAmount(300, 6.5)">
+        <div style="display:flex; align-items:center;"><div class="tier-num">3</div> <div><div style="font-size:11px; color:#a0aec0;">Amount</div><div style="font-weight:bold; font-size:13px;">>= $300</div></div></div>
+        <div style="text-align:right;"><div style="font-size:11px; color:#a0aec0;">Return</div><div style="color:var(--accent-green); font-weight:bold;">6.5%</div></div>
       </div>
 
-      <div style="text-align:left; font-size:12px; color:#a0aec0; margin-bottom:4px;">
-        Your total transaction amount will be: <span style="color:white; font-weight:bold;">$80.00 USDT</span>
-      </div>
-      
-      <div style="text-align:left; font-size:12px; color:#a0aec0;">Estimated return:</div>
-      <div class="return-grid">
-        <div class="return-box"><div>Daily</div><div>$17.36</div></div>
-        <div class="return-box"><div>100 day</div><div>$1736</div></div>
-        <div class="return-box"><div>Profit</div><div>$1656</div></div>
+      <div style="text-align:left; font-size:12px; color:#a0aec0; margin-top:10px;">YOU WANT TO BUY THE QUANTITY</div>
+      <div class="input-amount-box">
+        <span style="color:var(--accent-green); font-weight:bold;">₮</span>
+        <input type="number" id="depositAmountInput" placeholder="Min $1 USDT" value="1" oninput="calculateReturns()">
       </div>
 
-      <button class="btn-action btn-topup" style="width:100%; margin-top:5px;" onclick="goToDepositAddressScreen()">continue</button>
+      <div style="text-align:left; font-size:11px; color:#a0aec0;">ESTIMATED RETURN:</div>
+      <div class="return-grid-white">
+        <div class="return-card-w"><div>DAILY</div><div id="calcDaily">$0.05</div></div>
+        <div class="return-card-w"><div>20 DAYS</div><div id="calc20Days">$1.10</div></div>
+        <div class="return-card-w"><div>PROFIT</div><div id="calcProfit">$0.10</div></div>
+      </div>
+
+      <button class="btn-action" style="background:#2196f3; width:100%; margin-top:10px;" onclick="proceedToDepositQR()">Continue</button>
     </div>
   </div>
 
@@ -205,7 +219,7 @@
         Only send <b>BNB Smart Chain</b> network assets to this address. Other assets will be lost forever.
       </div>
 
-      <button class="btn-action btn-topup" style="width:100%;" onclick="alert('Waiting for transaction verification...'); closeModal('depositAddressModal');">I Have Paid</button>
+      <button class="btn-action btn-topup" style="width:100%;" onclick="simulateAdminApproval();">I Have Paid</button>
     </div>
   </div>
 
@@ -230,25 +244,49 @@
   </div>
 
   <script>
+    let currentReturnRate = 5.5;
+
     function switchTab(tabName) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-      
       document.getElementById('tab-' + tabName).classList.add('active');
       document.getElementById('nav-' + tabName).classList.add('active');
       window.scrollTo(0, 0);
     }
 
-    function openMintingModal() {
-      document.getElementById('mintingModal').style.display = 'flex';
+    function openBuyEnergyModal() {
+      document.getElementById('buyEnergyModal').style.display = 'flex';
+      calculateReturns();
     }
 
     function closeModal(modalId) {
       document.getElementById(modalId).style.display = 'none';
     }
 
-    function goToDepositAddressScreen() {
-      closeModal('mintingModal');
+    function setTierAmount(amount, rate) {
+      document.getElementById('depositAmountInput').value = amount;
+      currentReturnRate = rate;
+      
+      const boxes = document.querySelectorAll('.tier-box');
+      boxes.forEach(b => b.classList.remove('selected'));
+      event.currentTarget.classList.add('selected');
+      
+      calculateReturns();
+    }
+
+    function calculateReturns() {
+      const val = parseFloat(document.getElementById('depositAmountInput').value) || 0;
+      const daily = val * (currentReturnRate / 100);
+      const total20Days = daily * 20;
+      const profit = total20Days - val;
+
+      document.getElementById('calcDaily').innerText = '$' + daily.toFixed(2);
+      document.getElementById('calc20Days').innerText = '$' + total20Days.toFixed(2);
+      document.getElementById('calcProfit').innerText = '$' + profit.toFixed(2);
+    }
+
+    function proceedToDepositQR() {
+      closeModal('buyEnergyModal');
       const address = "0xbC3C28ff9d531eC29302c36087544e6034412BA6";
       document.getElementById('depositQR').src = "https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=" + address;
       document.getElementById('depositAddressModal').style.display = 'flex';
@@ -260,6 +298,19 @@
         alert('Deposit address copied to clipboard!');
       });
     }
+
+    function simulateAdminApproval() {
+      const amount = document.getElementById('depositAmountInput').value;
+      closeModal('depositAddressModal');
+      
+      document.getElementById('display-balance').innerText = '₮ ' + parseFloat(amount).toFixed(3);
+      document.getElementById('display-daily').innerText = 'Daily Earn: $' + (amount * (currentReturnRate / 100)).toFixed(3) + ' (' + currentReturnRate + '%)';
+      document.getElementById('display-status').innerText = 'Status: Active Strategy Running';
+      document.getElementById('trade-pct').innerText = currentReturnRate.toFixed(2) + '%';
+      
+      alert('Deposit submitted! Admin approval simulation active: Your account balance has been updated.');
+    }
   </script>
 </body>
-</html>
+        </html>
+  
