@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
@@ -19,12 +19,20 @@
   </div>
   <div class="card">
     <div>Total Balance</div>
-    <div class="balance-amount">$0.00 USDT</div>
+    <div class="balance-amount" id="balance">$0.00 USDT</div>
   </div>
   <div class="card">
     <h3>Automated Trading Bot</h3>
-    <p>Status: Idle / Ready to sync</p>
-    <button class="btn" onclick="alert('Bot session connected successfully!')">Initialize Bot</button>
+    <p id="status-text">Status: Idle / Ready to sync</p>
+    <button class="btn" onclick="initializeBot()">Initialize Bot</button>
   </div>
+
+  <script>
+    function initializeBot() {
+      document.getElementById('status-text').innerText = 'Status: Connected & Synchronizing...';
+      document.getElementById('balance').innerText = '$150.00 USDT';
+      alert('Apex Trade Bot successfully initialized!');
+    }
+  </script>
 </body>
 </html>
