@@ -51,11 +51,19 @@
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    /* Modal Styling for Deposit */
+    /* Modals / Popups */
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 200; justify-content: center; align-items: center; }
     .modal-content { background: var(--card-bg); width: 90%; max-width: 360px; padding: 20px; border-radius: 16px; border: 1px solid var(--card-border); text-align: center; position: relative; }
     .close-modal { position: absolute; top: 12px; right: 15px; background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
-    .qr-container { background: white; padding: 12px; border-radius: 12px; display: inline-block; margin: 15px 0; }
+    
+    /* Minting Quantity Box */
+    .minting-box { background: #0b1c1d; border: 1px solid var(--card-border); border-radius: 12px; padding: 12px; margin: 12px 0; display: flex; align-items: center; gap: 12px; text-align: left; }
+    .return-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin: 12px 0; }
+    .return-box { background: #0b1c1d; border: 1px solid var(--card-border); border-radius: 8px; padding: 8px 4px; font-size: 11px; color: #a0aec0; }
+    .return-box div:last-child { color: var(--accent-green); font-weight: bold; font-size: 12px; margin-top: 3px; }
+
+    /* QR Code and Wallet Display */
+    .qr-container { background: white; padding: 10px; border-radius: 12px; display: inline-block; margin: 10px 0; }
     .wallet-box { background: #0b1c1d; border: 1px solid var(--card-border); border-radius: 8px; padding: 10px; font-family: monospace; font-size: 11px; word-break: break-all; color: var(--text-main); margin: 10px 0; text-align: left; position: relative; }
     .copy-btn { background: #1a3f42; border: none; color: white; padding: 4px 8px; border-radius: 6px; font-size: 10px; cursor: pointer; float: right; }
   </style>
@@ -81,7 +89,7 @@
       <div class="settlement">Status: Ready to deposit</div>
 
       <div class="action-grid">
-        <button class="btn-action btn-topup" onclick="openDepositModal()">🔥 Top up</button>
+        <button class="btn-action btn-topup" onclick="openMintingModal()">🔥 Top up</button>
         <button class="btn-action btn-refer" onclick="switchTab('friends')">Refer & Earn</button>
       </div>
     </div>
@@ -142,21 +150,50 @@
     </div>
   </div>
 
-  <!-- EXACT DEPOSIT & QR CODE MODAL -->
-  <div id="depositModal" class="modal">
+  <!-- STEP 1: MINTING / QUANTITY SELECTION MODAL -->
+  <div id="mintingModal" class="modal">
     <div class="modal-content">
-      <button class="close-modal" onclick="closeDepositModal()">&times;</button>
+      <button class="close-modal" onclick="closeModal('mintingModal')">&times;</button>
+      <h3 style="margin-top:5px; font-size:16px;">You want to buy the quantity</h3>
+      
+      <div class="minting-box">
+        <div style="background:#00d284; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#0b1c1d; font-size:14px;">₮</div>
+        <div style="text-align:left;">
+          <div style="font-size:11px; color:#a0aec0;">Asset Package</div>
+          <div style="font-weight:bold; color:var(--accent-green); font-size:13px;">Minting 2 USDT</div>
+        </div>
+      </div>
+
+      <div style="text-align:left; font-size:12px; color:#a0aec0; margin-bottom:4px;">
+        Your total transaction amount will be: <span style="color:white; font-weight:bold;">$80.00 USDT</span>
+      </div>
+      
+      <div style="text-align:left; font-size:12px; color:#a0aec0;">Estimated return:</div>
+      <div class="return-grid">
+        <div class="return-box"><div>Daily</div><div>$17.36</div></div>
+        <div class="return-box"><div>100 day</div><div>$1736</div></div>
+        <div class="return-box"><div>Profit</div><div>$1656</div></div>
+      </div>
+
+      <button class="btn-action btn-topup" style="width:100%; margin-top:5px;" onclick="goToDepositAddressScreen()">continue</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: DEPOSIT QR CODE & WALLET ADDRESS SCREEN -->
+  <div id="depositAddressModal" class="modal">
+    <div class="modal-content" style="max-width:350px;">
+      <button class="close-modal" onclick="closeModal('depositAddressModal')">&times;</button>
       
       <div style="display:flex; align-items:center; gap:8px; justify-content:center; margin-bottom:5px;">
-        <div style="background:#00d284; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#0b1c1d; font-size:12px;">₮</div>
+        <div style="background:#00d284; width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#0b1c1d; font-size:12px;">₮</div>
         <div style="text-align:left;">
-          <div style="font-weight:bold; font-size:15px;">USDT</div>
+          <div style="font-weight:bold; font-size:14px;">USDT</div>
           <div style="font-size:11px; color:#a0aec0;">BNB Smart Chain</div>
         </div>
       </div>
 
       <div class="qr-container">
-        <img id="depositQR" src="" alt="Deposit QR Code" style="width:150px; height:150px; display:block;">
+        <img id="depositQR" src="" alt="Deposit QR Code" style="width:140px; height:140px; display:block;">
       </div>
 
       <div class="wallet-box">
@@ -164,11 +201,11 @@
         <span id="walletAddressText">0xbC3C28ff9d531eC29302c36087544e6034412BA6</span>
       </div>
 
-      <div style="font-size:11px; color:#ff9800; background:rgba(255,152,0,0.1); padding:8px; border-radius:8px; border:1px solid rgba(255,152,0,0.3); text-align:left; margin-bottom:15px;">
+      <div style="font-size:11px; color:#ff9800; background:rgba(255,152,0,0.1); padding:8px; border-radius:8px; border:1px solid rgba(255,152,0,0.3); text-align:left; margin-bottom:12px;">
         Only send <b>BNB Smart Chain</b> network assets to this address. Other assets will be lost forever.
       </div>
 
-      <button class="btn-action btn-topup" style="width:100%;" onclick="alert('Checking transaction network...');">I Have Paid</button>
+      <button class="btn-action btn-topup" style="width:100%;" onclick="alert('Waiting for transaction verification...'); closeModal('depositAddressModal');">I Have Paid</button>
     </div>
   </div>
 
@@ -202,14 +239,19 @@
       window.scrollTo(0, 0);
     }
 
-    function openDepositModal() {
-      const address = "0xbC3C28ff9d531eC29302c36087544e6034412BA6";
-      document.getElementById('depositQR').src = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + address;
-      document.getElementById('depositModal').style.display = 'flex';
+    function openMintingModal() {
+      document.getElementById('mintingModal').style.display = 'flex';
     }
 
-    function closeDepositModal() {
-      document.getElementById('depositModal').style.display = 'none';
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = 'none';
+    }
+
+    function goToDepositAddressScreen() {
+      closeModal('mintingModal');
+      const address = "0xbC3C28ff9d531eC29302c36087544e6034412BA6";
+      document.getElementById('depositQR').src = "https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=" + address;
+      document.getElementById('depositAddressModal').style.display = 'flex';
     }
 
     function copyWalletAddress() {
@@ -220,5 +262,4 @@
     }
   </script>
 </body>
-  </html>
-  
+</html>
