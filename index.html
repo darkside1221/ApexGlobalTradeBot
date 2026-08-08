@@ -10,6 +10,8 @@
     .card { background: #1e1e1e; padding: 15px; border-radius: 12px; margin-top: 15px; border: 1px solid #2a2a2a; }
     .balance-amount { font-size: 24px; font-weight: bold; color: #4caf50; margin-top: 5px; }
     .btn { background: #4caf50; color: white; border: none; padding: 10px 15px; border-radius: 8px; width: 100%; font-weight: bold; margin-top: 10px; cursor: pointer; }
+    .ticker { display: flex; justify-content: space-between; margin-top: 8px; font-size: 14px; }
+    .green { color: #4caf50; }
   </style>
 </head>
 <body>
@@ -17,22 +19,49 @@
     <h2>Apex Terminal</h2>
     <span>🟢 Live</span>
   </div>
+
   <div class="card">
     <div>Total Balance</div>
-    <div class="balance-amount" id="balance">$0.00 USDT</div>
+    <div class="balance-amount" id="balance">$150.00 USDT</div>
   </div>
+
+  <div class="card">
+    <h3>Market Feed (USDT)</h3>
+    <div class="ticker"><span>BTC/USDT</span> <span id="btc-price" class="green">$64,210.00</span></div>
+    <div class="ticker"><span>ETH/USDT</span> <span id="eth-price" class="green">$3,450.50</span></div>
+  </div>
+
   <div class="card">
     <h3>Automated Trading Bot</h3>
-    <p id="status-text">Status: Idle / Ready to sync</p>
-    <button class="btn" onclick="initializeBot()">Initialize Bot</button>
+    <p id="status-text">Status: Connected & Synchronizing...</p>
+    <button class="btn" onclick="toggleBot()" id="bot-btn">Pause Bot</button>
   </div>
 
   <script>
-    function initializeBot() {
-      document.getElementById('status-text').innerText = 'Status: Connected & Synchronizing...';
-      document.getElementById('balance').innerText = '$150.00 USDT';
-      alert('Apex Trade Bot successfully initialized!');
+    let isRunning = true;
+    function toggleBot() {
+      isRunning = !isRunning;
+      const statusText = document.getElementById('status-text');
+      const btn = document.getElementById('bot-btn');
+      if(isRunning) {
+        statusText.innerText = 'Status: Connected & Synchronizing...';
+        btn.innerText = 'Pause Bot';
+        btn.style.background = '#4caf50';
+      } else {
+        statusText.innerText = 'Status: Paused by User';
+        btn.innerText = 'Resume Bot';
+        btn.style.background = '#ff9800';
+      }
     }
+
+    // Simulate live price updates
+    setInterval(() => {
+      if(!isRunning) return;
+      let btc = 64200 + (Math.random() * 40 - 20);
+      let eth = 3450 + (Math.random() * 10 - 5);
+      document.getElementById('btc-price').innerText = '$' + btc.toFixed(2);
+      document.getElementById('eth-price').innerText = '$' + eth.toFixed(2);
+    }, 2000);
   </script>
 </body>
 </html>
