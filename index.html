@@ -6,25 +6,24 @@
   <title>USDT AI Trade Robot</title>
   <style>
     :root {
-      --bg-color: #081516;
-      --card-bg: #0f2224;
-      --border-color: #1a3a3d;
+      --bg-color: #0b1c1d;
+      --card-bg: #11282a;
+      --card-border: #1a3f42;
       --accent-green: #00d284;
-      --accent-orange: #ff9800;
       --text-main: #ffffff;
       --text-muted: #8ab4f8;
     }
     body { background-color: var(--bg-color); color: var(--text-main); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding-bottom: 90px; }
     
     /* Top Bar */
-    .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: var(--card-bg); border-bottom: 1px solid var(--border-color); font-size: 13px; }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: var(--card-bg); border-bottom: 1px solid var(--card-border); font-size: 13px; }
     .badge { display: flex; align-items: center; gap: 6px; color: #a0aec0; }
     .earned-box { display: flex; align-items: center; gap: 6px; }
     .btn-withdraw { background: linear-gradient(135deg, #ffa726, #fb8c00); color: white; border: none; padding: 5px 12px; border-radius: 14px; font-weight: bold; cursor: pointer; font-size: 12px; }
 
-    /* Main Balance Card */
-    .main-card { background: var(--card-bg); border-radius: 16px; padding: 20px 15px; margin: 15px; border: 1px solid var(--border-color); text-align: center; }
-    .title-orange { color: var(--accent-orange); font-weight: bold; font-size: 14px; margin-bottom: 8px; }
+    /* Main Container Card */
+    .main-card { background: var(--card-bg); border-radius: 16px; padding: 20px 15px; margin: 15px; border: 1px solid var(--card-border); text-align: center; }
+    .title-orange { color: #ff9800; font-weight: bold; font-size: 14px; margin-bottom: 8px; }
     .balance-val { font-size: 36px; font-weight: bold; color: var(--text-main); margin: 5px 0; }
     .daily-earn { font-size: 13px; color: var(--accent-green); margin-bottom: 5px; }
     .settlement { font-size: 11px; color: #718096; margin-bottom: 15px; }
@@ -35,15 +34,15 @@
     .btn-topup { background: #00b471; }
     .btn-refer { background: #e91e63; }
 
-    /* Sections & Cards */
-    .section-card { background: var(--card-bg); border-radius: 16px; padding: 15px; margin: 15px; border: 1px solid var(--border-color); }
-    .trade-item { background: #081516; border-radius: 12px; padding: 12px; margin-top: 10px; border: 1px solid var(--border-color); }
+    /* Content Cards */
+    .section-card { background: var(--card-bg); border-radius: 16px; padding: 15px; margin: 15px; border: 1px solid var(--card-border); }
+    .trade-item { background: #0e2022; border-radius: 12px; padding: 12px; margin-top: 10px; border: 1px solid var(--card-border); }
     .trade-top { display: flex; justify-content: space-between; font-weight: bold; font-size: 14px; margin-bottom: 8px; }
-    .trade-details { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); }
+    .trade-details { display: flex; justify-content: space-between; font-size: 12px; color: #8ab4f8; }
     .trade-percentage { color: var(--accent-green); font-weight: bold; font-size: 16px; }
 
     /* Bottom Navigation Bar */
-    .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); display: flex; justify-content: space-around; padding: 8px 0; border-top: 1px solid var(--border-color); z-index: 100; }
+    .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); display: flex; justify-content: space-around; padding: 8px 0; border-top: 1px solid var(--card-border); z-index: 100; }
     .nav-item { text-align: center; color: #718096; font-size: 11px; cursor: pointer; background: none; border: none; }
     .nav-item.active { color: var(--accent-green); }
     .nav-item svg { width: 22px; height: 22px; fill: currentColor; margin-bottom: 2px; }
@@ -52,20 +51,13 @@
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    /* Modals / Popups */
-    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 200; justify-content: center; align-items: center; overflow-y: auto; }
-    .modal-content { background: var(--card-bg); width: 90%; max-width: 400px; padding: 20px; border-radius: 16px; border: 1px solid var(--border-color); text-align: center; position: relative; }
-    .close-modal { position: absolute; top: 15px; right: 15px; background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
-    
-    /* Minting & Deposit UI Match */
-    .minting-box { background: #081516; border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; margin: 15px 0; display: flex; align-items: center; gap: 12px; text-align: left; }
-    .return-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 15px 0; }
-    .return-box { background: #081516; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 5px; font-size: 11px; color: #a0aec0; }
-    .return-box div:last-child { color: var(--accent-green); font-weight: bold; font-size: 13px; margin-top: 4px; }
-    
-    .qr-container { background: white; padding: 15px; border-radius: 12px; display: inline-block; margin: 15px 0; }
-    .wallet-box { background: #081516; border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; font-family: monospace; font-size: 11px; word-break: break-all; color: var(--text-main); margin: 10px 0; text-align: left; position: relative; }
-    .copy-btn { background: #1a3a3d; border: none; color: white; padding: 4px 8px; border-radius: 6px; font-size: 10px; cursor: pointer; float: right; }
+    /* Modal Styling for Deposit */
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 200; justify-content: center; align-items: center; }
+    .modal-content { background: var(--card-bg); width: 90%; max-width: 360px; padding: 20px; border-radius: 16px; border: 1px solid var(--card-border); text-align: center; position: relative; }
+    .close-modal { position: absolute; top: 12px; right: 15px; background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
+    .qr-container { background: white; padding: 12px; border-radius: 12px; display: inline-block; margin: 15px 0; }
+    .wallet-box { background: #0b1c1d; border: 1px solid var(--card-border); border-radius: 8px; padding: 10px; font-family: monospace; font-size: 11px; word-break: break-all; color: var(--text-main); margin: 10px 0; text-align: left; position: relative; }
+    .copy-btn { background: #1a3f42; border: none; color: white; padding: 4px 8px; border-radius: 6px; font-size: 10px; cursor: pointer; float: right; }
   </style>
 </head>
 <body>
@@ -75,8 +67,8 @@
     <div class="badge">👤 Affiliate marketer</div>
     <div class="earned-box">
       <span style="font-size: 12px; color: #a0aec0;">You Earned:</span>
-      <span style="color: var(--accent-green); font-weight: bold;">🟢 104.160</span>
-      <button class="btn-withdraw" onclick="openModal('withdrawModal')">Withdraw ></button>
+      <span style="color: var(--accent-green); font-weight: bold;">🟢 0.000</span>
+      <button class="btn-withdraw" onclick="alert('No earnings available to withdraw yet.')">Withdraw ></button>
     </div>
   </div>
 
@@ -84,12 +76,12 @@
   <div id="tab-home" class="tab-content active">
     <div class="main-card">
       <div class="title-orange">🔥 (USDT Trade Rights)</div>
-      <div class="balance-val" id="user-balance">₮ 80.000</div>
-      <div class="daily-earn">Daily Earn: $17.360 (+21.70%)</div>
-      <div class="settlement">Settlement time: 23:06:17</div>
+      <div class="balance-val">₮ 0.000</div>
+      <div class="daily-earn">Daily Earn: $0.00 (0.00%)</div>
+      <div class="settlement">Status: Ready to deposit</div>
 
       <div class="action-grid">
-        <button class="btn-action btn-topup" onclick="openModal('topupModal')">🔥 Top up</button>
+        <button class="btn-action btn-topup" onclick="openDepositModal()">🔥 Top up</button>
         <button class="btn-action btn-refer" onclick="switchTab('friends')">Refer & Earn</button>
       </div>
     </div>
@@ -98,17 +90,17 @@
     <div class="section-card">
       <div style="display: flex; gap: 10px; margin-bottom: 15px;">
         <button style="flex:1; background:#00b471; border:none; padding:8px; border-radius:8px; color:white; font-weight:bold;">Ai Trading status</button>
-        <button style="flex:1; background:#0f2224; border:1px solid var(--border-color); padding:8px; border-radius:8px; color:#a0aec0;">USDT Trade Rights</button>
+        <button style="flex:1; background:#11282a; border:1px solid var(--card-border); padding:8px; border-radius:8px; color:#a0aec0;">USDT Trade Rights</button>
       </div>
 
       <div class="trade-item">
         <div class="trade-top">
-          <span>ONDO/USDT <span style="color:var(--accent-green); font-size:11px; background:#081516; padding:2px 6px; border-radius:4px;">short x15</span></span>
-          <span class="trade-percentage">130.11%</span>
+          <span>ONDO/USDT <span style="color:var(--accent-green); font-size:11px; background:#0b1c1d; padding:2px 6px; border-radius:4px;">short x15</span></span>
+          <span class="trade-percentage">0.00%</span>
         </div>
         <div class="trade-details">
-          <span>Entry Price: 0.39042554</span>
-          <span>Latest Price: 0.35656000</span>
+          <span>Entry Price: --</span>
+          <span>Latest Price: --</span>
         </div>
       </div>
     </div>
@@ -119,7 +111,7 @@
     <div class="section-card">
       <h2>Referral and Earn</h2>
       <p style="font-size: 13px; color: #a0aec0; line-height: 1.4;">Team bonus 14%: 5% return on Level 1 deposits, and 1% return on Levels 2 to 10 deposits.</p>
-      <div style="background: #081516; padding: 12px; border-radius: 8px; border: 1px dashed var(--accent-green); font-size: 12px; word-break: break-all; color: var(--text-muted); margin-top: 10px;">
+      <div style="background: #0b1c1d; padding: 12px; border-radius: 8px; border: 1px dashed var(--accent-green); font-size: 12px; word-break: break-all; color: var(--text-muted); margin-top: 10px;">
         https://t.me/USDT_AI_Trade_bot?start=invite_code_356669
       </div>
       <button class="btn-action btn-topup" style="width:100%; margin-top:12px;" onclick="alert('Referral link copied!')">Copy Link</button>
@@ -150,51 +142,21 @@
     </div>
   </div>
 
-  <!-- STEP 1: MINTING QUANTITY MODAL -->
-  <div id="topupModal" class="modal">
+  <!-- EXACT DEPOSIT & QR CODE MODAL -->
+  <div id="depositModal" class="modal">
     <div class="modal-content">
-      <button class="close-modal" onclick="closeModal('topupModal')">&times;</button>
-      <h3 style="margin-top:5px; font-size:16px;">You want to buy the quantity</h3>
+      <button class="close-modal" onclick="closeDepositModal()">&times;</button>
       
-      <div class="minting-box">
-        <div style="background:#00d284; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#081516;">₮</div>
-        <div style="text-align:left;">
-          <div style="font-size:11px; color:#a0aec0;">Asset Package</div>
-          <div style="font-weight:bold; color:var(--accent-green); font-size:14px;">Minting 2 USDT</div>
-        </div>
-      </div>
-
-      <div style="text-align:left; font-size:13px; color:#a0aec0; margin-bottom:5px;">
-        Your total transaction amount will be: <span style="color:white; font-weight:bold;">$80.00 USDT</span>
-      </div>
-      
-      <div style="text-align:left; font-size:13px; color:#a0aec0;">Estimated return:</div>
-      <div class="return-grid">
-        <div class="return-box"><div>Daily</div><div>$17.36</div></div>
-        <div class="return-box"><div>100 day</div><div>$1736</div></div>
-        <div class="return-box"><div>Profit</div><div>$1656</div></div>
-      </div>
-
-      <button class="btn-action btn-topup" style="width:100%; margin-top:10px;" onclick="goToDepositAddress()">continue</button>
-    </div>
-  </div>
-
-  <!-- STEP 2: EXACT DEPOSIT & QR CODE MODAL -->
-  <div id="depositAddressModal" class="modal">
-    <div class="modal-content" style="max-width:360px;">
-      <button class="close-modal" onclick="closeModal('depositAddressModal')">&times;</button>
-      
-      <div style="display:flex; align-items:center; gap:8px; justify-content:center; margin-bottom:10px;">
-        <div style="background:#00d284; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#081516; font-size:12px;">₮</div>
+      <div style="display:flex; align-items:center; gap:8px; justify-content:center; margin-bottom:5px;">
+        <div style="background:#00d284; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#0b1c1d; font-size:12px;">₮</div>
         <div style="text-align:left;">
           <div style="font-weight:bold; font-size:15px;">USDT</div>
           <div style="font-size:11px; color:#a0aec0;">BNB Smart Chain</div>
         </div>
       </div>
 
-      <!-- QR Code Image generated dynamically -->
       <div class="qr-container">
-        <img id="depositQR" src="" alt="Deposit QR Code" style="width:160px; height:160px; display:block;">
+        <img id="depositQR" src="" alt="Deposit QR Code" style="width:150px; height:150px; display:block;">
       </div>
 
       <div class="wallet-box">
@@ -202,23 +164,11 @@
         <span id="walletAddressText">0xbC3C28ff9d531eC29302c36087544e6034412BA6</span>
       </div>
 
-      <div style="font-size:11px; color:#ff9800; background:rgba(255,152,0,0.1); padding:8px; border-radius:8px; border:1px solid rgba(255,152,0,0.3); text-align:left;">
-        ⚠️ Only send <b>BNB Smart Chain</b> network assets to this address. Other assets will be lost forever.
+      <div style="font-size:11px; color:#ff9800; background:rgba(255,152,0,0.1); padding:8px; border-radius:8px; border:1px solid rgba(255,152,0,0.3); text-align:left; margin-bottom:15px;">
+        Only send <b>BNB Smart Chain</b> network assets to this address. Other assets will be lost forever.
       </div>
 
-      <button class="btn-action btn-topup" style="width:100%; margin-top:15px;" onclick="alert('Payment detected! Processing deposit confirmation...'); closeModal('depositAddressModal');">I Have Paid</button>
-    </div>
-  </div>
-
-  <!-- WITHDRAW MODAL -->
-  <div id="withdrawModal" class="modal">
-    <div class="modal-content">
-      <button class="close-modal" onclick="closeModal('withdrawModal')">&times;</button>
-      <h3>Withdraw Assets</h3>
-      <p style="font-size:12px; color:#a0aec0;">Available: ₮ 104.16</p>
-      <input type="text" style="width:100%; padding:10px; background:#081516; border:1px solid var(--border-color); border-radius:8px; color:white; margin:10px 0; box-sizing:border-box;" placeholder="Withdrawal Address (BEP20)">
-      <input type="text" style="width:100%; padding:10px; background:#081516; border:1px solid var(--border-color); border-radius:8px; color:white; margin:10px 0; box-sizing:border-box;" placeholder="Amount to withdraw">
-      <button class="btn-action btn-topup" style="width:100%;" onclick="alert('Withdrawal request submitted successfully.')">Confirm</button>
+      <button class="btn-action btn-topup" style="width:100%;" onclick="alert('Checking transaction network...');">I Have Paid</button>
     </div>
   </div>
 
@@ -252,20 +202,14 @@
       window.scrollTo(0, 0);
     }
 
-    function openModal(modalId) {
-      document.getElementById(modalId).style.display = 'flex';
-    }
-
-    function closeModal(modalId) {
-      document.getElementById(modalId).style.display = 'none';
-    }
-
-    function goToDepositAddress() {
-      closeModal('topupModal');
+    function openDepositModal() {
       const address = "0xbC3C28ff9d531eC29302c36087544e6034412BA6";
-      // Generate clean QR code using public API endpoint matching the address
-      document.getElementById('depositQR').src = "https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=" + address;
-      openModal('depositAddressModal');
+      document.getElementById('depositQR').src = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + address;
+      document.getElementById('depositModal').style.display = 'flex';
+    }
+
+    function closeDepositModal() {
+      document.getElementById('depositModal').style.display = 'none';
     }
 
     function copyWalletAddress() {
@@ -276,5 +220,5 @@
     }
   </script>
 </body>
-          </html>
-          
+  </html>
+  
