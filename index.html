@@ -3,29 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>USDT AI Trade Robot</title>
+  <title>Apex AI Trade Robot</title>
   <style>
     :root {
-      --bg-color: #0b1c1d;
-      --card-bg: #11282a;
-      --card-border: #1a3f42;
+      --bg-color: #081516;
+      --card-bg: #0f2224;
+      --border-color: #1a3a3d;
       --accent-green: #00d284;
-      --accent-teal: #00b471;
+      --accent-orange: #ff9800;
       --text-main: #ffffff;
       --text-muted: #8ab4f8;
     }
     body { background-color: var(--bg-color); color: var(--text-main); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding-bottom: 90px; }
     
     /* Top Bar */
-    .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: var(--card-bg); border-bottom: 1px solid var(--card-border); font-size: 13px; }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: var(--card-bg); border-bottom: 1px solid var(--border-color); font-size: 13px; }
     .badge { display: flex; align-items: center; gap: 6px; color: #a0aec0; }
     .earned-box { display: flex; align-items: center; gap: 6px; }
     .btn-withdraw { background: linear-gradient(135deg, #ffa726, #fb8c00); color: white; border: none; padding: 5px 12px; border-radius: 14px; font-weight: bold; cursor: pointer; font-size: 12px; }
 
-    /* Main Container Card */
-    .main-card { background: var(--card-bg); border-radius: 16px; padding: 20px 15px; margin: 15px; border: 1px solid var(--card-border); text-align: center; }
-    .title-orange { color: #ff9800; font-weight: bold; font-size: 14px; margin-bottom: 8px; }
-    .balance-val { font-size: 36px; font-weight: bold; color: var(--text-main); letter-spacing: 0.5px; margin: 5px 0; }
+    /* Main Balance Card */
+    .main-card { background: var(--card-bg); border-radius: 16px; padding: 20px 15px; margin: 15px; border: 1px solid var(--border-color); text-align: center; }
+    .title-orange { color: var(--accent-orange); font-weight: bold; font-size: 14px; margin-bottom: 8px; }
+    .balance-val { font-size: 36px; font-weight: bold; color: var(--text-main); margin: 5px 0; }
     .daily-earn { font-size: 13px; color: var(--accent-green); margin-bottom: 5px; }
     .settlement { font-size: 11px; color: #718096; margin-bottom: 15px; }
 
@@ -35,24 +35,15 @@
     .btn-topup { background: #00b471; }
     .btn-refer { background: #e91e63; }
 
-    /* Content Cards */
-    .section-card { background: var(--card-bg); border-radius: 16px; padding: 15px; margin: 15px; border: 1px solid var(--card-border); }
-    .tab-toggles { display: flex; gap: 10px; margin-bottom: 15px; }
-    .toggle-btn { flex: 1; padding: 10px; border-radius: 10px; font-weight: bold; font-size: 13px; text-align: center; border: 1px solid var(--card-border); background: var(--card-bg); color: #a0aec0; cursor: pointer; }
-    .toggle-btn.active { background: #00b471; color: white; border: none; }
-
-    /* Trade Item */
-    .trade-item { background: #0e2022; border-radius: 12px; padding: 12px; margin-top: 10px; border: 1px solid var(--card-border); }
+    /* Sections & Cards */
+    .section-card { background: var(--card-bg); border-radius: 16px; padding: 15px; margin: 15px; border: 1px solid var(--border-color); }
+    .trade-item { background: #081516; border-radius: 12px; padding: 12px; margin-top: 10px; border: 1px solid var(--border-color); }
     .trade-top { display: flex; justify-content: space-between; font-weight: bold; font-size: 14px; margin-bottom: 8px; }
-    .trade-details { display: flex; justify-content: space-between; font-size: 12px; color: #8ab4f8; }
+    .trade-details { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); }
     .trade-percentage { color: var(--accent-green); font-weight: bold; font-size: 16px; }
 
-    /* ROI Rows */
-    .roi-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--card-border); font-size: 14px; }
-    .roi-row:last-child { border-bottom: none; }
-
     /* Bottom Navigation Bar */
-    .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); display: flex; justify-content: space-around; padding: 8px 0; border-top: 1px solid var(--card-border); z-index: 100; }
+    .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); display: flex; justify-content: space-around; padding: 8px 0; border-top: 1px solid var(--border-color); z-index: 100; }
     .nav-item { text-align: center; color: #718096; font-size: 11px; cursor: pointer; background: none; border: none; }
     .nav-item.active { color: var(--accent-green); }
     .nav-item svg { width: 22px; height: 22px; fill: currentColor; margin-bottom: 2px; }
@@ -60,17 +51,22 @@
     /* Tab Display System */
     .tab-content { display: none; }
     .tab-content.active { display: block; }
+
+    /* Modals / Popups */
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 200; justify-content: center; align-items: center; }
+    .modal-content { background: var(--card-bg); width: 85%; max-width: 400px; padding: 20px; border-radius: 16px; border: 1px solid var(--border-color); text-align: center; }
+    .input-field { width: 100%; padding: 10px; background: #081516; border: 1px solid var(--border-color); border-radius: 8px; color: white; margin: 15px 0; box-sizing: border-box; }
   </style>
 </head>
 <body>
 
   <!-- Top Status Bar -->
   <div class="top-bar">
-    <div class="badge">👤 Affiliate marketer</div>
+    <div class="badge">👤 Affiliate Member</div>
     <div class="earned-box">
-      <span style="font-size: 12px; color: #a0aec0;">You Earned:</span>
-      <span style="color: var(--accent-green); font-weight: bold;">🟢 104.160</span>
-      <button class="btn-withdraw" onclick="alert('Redirecting to withdrawal gateway...')">Withdraw ></button>
+      <span style="font-size: 12px; color: #a0aec0;">Earned:</span>
+      <span style="color: var(--accent-green); font-weight: bold;">₮ 0.00</span>
+      <button class="btn-withdraw" onclick="openModal('withdrawModal')">Withdraw ></button>
     </div>
   </div>
 
@@ -78,64 +74,29 @@
   <div id="tab-home" class="tab-content active">
     <div class="main-card">
       <div class="title-orange">🔥 (USDT Trade Rights)</div>
-      <div class="balance-val">₮ 80.000</div>
-      <div class="daily-earn">Daily Earn: $17.360 (+21.70%)</div>
-      <div class="settlement">Settlement time: 23:06:17</div>
+      <div class="balance-val" id="user-balance">₮ 0.000</div>
+      <div class="daily-earn">Daily Earn: $0.00 (0.00%)</div>
+      <div class="settlement">Status: Ready for Activation</div>
 
       <div class="action-grid">
-        <button class="btn-action btn-topup" onclick="alert('Top up interface opened.')">🔥 Top up</button>
+        <button class="btn-action btn-topup" onclick="openModal('topupModal')">🔥 Top up</button>
         <button class="btn-action btn-refer" onclick="switchTab('friends')">Refer & Earn</button>
       </div>
     </div>
 
     <!-- AI Trading Status List -->
     <div class="section-card">
-      <div class="tab-toggles">
-        <div class="toggle-btn active">Ai Trading status</div>
-        <div class="toggle-btn" style="background:#0e2022;">USDT Trade Rights</div>
-      </div>
-
+      <h3 style="margin-top:0; font-size:14px; color:#a0aec0;">Active Strategy Signals</h3>
       <div class="trade-item">
         <div class="trade-top">
-          <span>ONDO/USDT <span style="color:var(--accent-green); font-size:11px; background:#0b1c1d; padding:2px 6px; border-radius:4px;">short x15</span></span>
-          <span class="trade-percentage">130.11%</span>
+          <span>ONDO/USDT <span style="color:var(--accent-green); font-size:11px; background:#0f2224; padding:2px 6px; border-radius:4px;">short x15</span></span>
+          <span class="trade-percentage">0.00%</span>
         </div>
         <div class="trade-details">
-          <span>Entry Price: 0.39042554</span>
-          <span>Latest Price: 0.35656000</span>
+          <span>Entry Price: --</span>
+          <span>Latest Price: --</span>
         </div>
       </div>
-
-      <div class="trade-item">
-        <div class="trade-top">
-          <span>ZRO/USDT <span style="color:var(--accent-green); font-size:11px; background:#0b1c1d; padding:2px 6px; border-radius:4px;">Long x20</span></span>
-          <span class="trade-percentage">282.03%</span>
-        </div>
-        <div class="trade-details">
-          <span>Entry Price: 0.72391600</span>
-          <span>Latest Price: 0.82600000</span>
-        </div>
-      </div>
-
-      <div class="trade-item">
-        <div class="trade-top">
-          <span>TRAC/USDT <span style="color:var(--accent-green); font-size:11px; background:#0b1c1d; padding:2px 6px; border-radius:4px;">short x5</span></span>
-          <span class="trade-percentage">32.19%</span>
-        </div>
-        <div class="trade-details">
-          <span>Entry Price: 0.29445846</span>
-          <span>Latest Price: 0.27550000</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- ROI Tiers -->
-    <div class="section-card">
-      <h3 style="margin-top:0; font-size:15px; color:#ffffff;">AE (AI Energy) Return on Investment</h3>
-      <div class="roi-row"><span style="color:#ff9800;">🔥 ≥ $1.000</span> <span style="color:var(--accent-green)">0.80%</span></div>
-      <div class="roi-row"><span style="color:#ff9800;">🔥 ≥ $5.000</span> <span style="color:var(--accent-green)">20.30%</span></div>
-      <div class="roi-row"><span style="color:#ff9800;">🔥 ≥ $50.000</span> <span style="color:var(--accent-green)">21.70%</span></div>
-      <div class="roi-row"><span style="color:#ff9800;">🔥 ≥ $300.000</span> <span style="color:var(--accent-green)">23.10%</span></div>
     </div>
   </div>
 
@@ -143,20 +104,20 @@
   <div id="tab-friends" class="tab-content">
     <div class="section-card">
       <h2>Referral and Earn</h2>
-      <p style="font-size: 13px; color: #a0aec0; line-height: 1.4;">Team bonus 14%: 5% return on Level 1 deposits, and 1% return on Levels 2 to 10 deposits.</p>
-      <div style="background: #0b1c1d; padding: 12px; border-radius: 8px; border: 1px dashed var(--accent-green); font-size: 12px; word-break: break-all; color: var(--text-muted); margin-top: 10px;">
-        https://t.me/USDT_AI_Trade_bot?start=invite_code_356669
+      <p style="font-size: 13px; color: #a0aec0; line-height: 1.4;">Team bonus structure: earn commission on active level referrals.</p>
+      <div style="background: #081516; padding: 12px; border-radius: 8px; border: 1px dashed var(--accent-green); font-size: 12px; word-break: break-all; color: var(--text-muted); margin-top: 10px;">
+        https://t.me/ApexGlobalTradeBot?start=ref_001
       </div>
-      <button class="btn-action btn-topup" style="width:100%; margin-top:12px;" onclick="alert('Link copied!')">Copy Link</button>
+      <button class="btn-action btn-topup" style="width:100%; margin-top:12px;" onclick="alert('Referral link copied!')">Copy Link</button>
     </div>
   </div>
 
   <!-- TAB 3: INTRODUCTION -->
   <div id="tab-introduction" class="tab-content">
     <div class="section-card">
-      <h2>AE Digital Technologies LLC</h2>
+      <h2>Apex AI Trade Platform</h2>
       <p style="font-size: 13px; color: #a0aec0; line-height: 1.5;">
-        Officially launched on December 9, 2025. We redefine cryptocurrency trading with artificial intelligence. Our AI system runs automatically 24/7, executing intelligent trading signals (5x, 10x, 20x shorting/longing) to help you easily earn USDT.
+        Automated AI trading bot infrastructure designed for decentralized asset management and secure execution.
       </p>
     </div>
   </div>
@@ -167,11 +128,33 @@
       <h3>Complete tasks to get rewards</h3>
       <div class="trade-item" style="display:flex; justify-content:space-between; align-items:center;">
         <div>
-          <div style="font-weight:bold; font-size:13px;">Join our VIP channel</div>
-          <div style="font-size:12px; color:var(--accent-green);">+ 0.50 USDT 🔥</div>
+          <div style="font-weight:bold; font-size:13px;">New user activation reward</div>
+          <div style="font-size:12px; color:var(--accent-green);">+ 0.00 USDT</div>
         </div>
-        <button class="btn-action btn-topup" style="padding:6px 12px; font-size:12px;">Join</button>
+        <button class="btn-action btn-topup" style="padding:6px 12px; font-size:12px;" onclick="alert('No active bonus to claim yet.')">Claim</button>
       </div>
+    </div>
+  </div>
+
+  <!-- MODALS -->
+  <div id="topupModal" class="modal">
+    <div class="modal-content">
+      <h3>Top Up USDT</h3>
+      <p style="font-size:12px; color:#a0aec0;">Send funds to activate your trading balance.</p>
+      <input type="text" class="input-field" placeholder="Enter amount (USDT)" id="depositInput">
+      <button class="btn-action btn-topup" style="width:100%;" onclick="processDeposit()">Confirm Deposit</button>
+      <button style="background:none; border:none; color:#a0aec0; margin-top:10px; cursor:pointer;" onclick="closeModal('topupModal')">Cancel</button>
+    </div>
+  </div>
+
+  <div id="withdrawModal" class="modal">
+    <div class="modal-content">
+      <h3>Withdraw Assets</h3>
+      <p style="font-size:12px; color:#a0aec0;">Available: ₮ 0.00</p>
+      <input type="text" class="input-field" placeholder="Withdrawal Address (TRC20/BEP20)">
+      <input type="text" class="input-field" placeholder="Amount to withdraw">
+      <button class="btn-action btn-topup" style="width:100%;" onclick="alert('Insufficient balance for withdrawal.')">Submit Withdrawal</button>
+      <button style="background:none; border:none; color:#a0aec0; margin-top:10px; cursor:pointer;" onclick="closeModal('withdrawModal')">Cancel</button>
     </div>
   </div>
 
@@ -203,6 +186,25 @@
       document.getElementById('tab-' + tabName).classList.add('active');
       document.getElementById('nav-' + tabName).classList.add('active');
       window.scrollTo(0, 0);
+    }
+
+    function openModal(modalId) {
+      document.getElementById(modalId).style.display = 'flex';
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = 'none';
+    }
+
+    function processDeposit() {
+      const val = document.getElementById('depositInput').value;
+      if(val && !isNaN(val) && Number(val) > 0) {
+        document.getElementById('user-balance').innerText = '₮ ' + Number(val).toFixed(3);
+        alert('Deposit simulation successful!');
+        closeModal('topupModal');
+      } else {
+        alert('Please enter a valid amount.');
+      }
     }
   </script>
 </body>
