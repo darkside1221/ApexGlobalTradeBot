@@ -1,67 +1,185 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apex Global Trade</title>
+  <title>USDT AI Trade Robot</title>
   <style>
-    body { background-color: #121212; color: #e0e0e0; font-family: sans-serif; padding: 15px; margin: 0; }
-    .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 10px; }
-    .card { background: #1e1e1e; padding: 15px; border-radius: 12px; margin-top: 15px; border: 1px solid #2a2a2a; }
-    .balance-amount { font-size: 24px; font-weight: bold; color: #4caf50; margin-top: 5px; }
-    .btn { background: #4caf50; color: white; border: none; padding: 10px 15px; border-radius: 8px; width: 100%; font-weight: bold; margin-top: 10px; cursor: pointer; }
-    .ticker { display: flex; justify-content: space-between; margin-top: 8px; font-size: 14px; }
-    .green { color: #4caf50; }
+    :root {
+      --bg-color: #0b191a;
+      --card-bg: #112527;
+      --accent-green: #00d284;
+      --accent-orange: #ff9800;
+      --text-main: #ffffff;
+      --text-muted: #8ab4f8;
+    }
+    body { background-color: var(--bg-color); color: var(--text-main); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding-bottom: 80px; }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: var(--card-bg); border-bottom: 1px solid #1a383a; }
+    .badge { background: #1a383a; padding: 5px 10px; border-radius: 20px; font-size: 14px; display: inline-flex; align-items: center; gap: 5px; }
+    .btn-withdraw { background: linear-gradient(135deg, #ffa726, #fb8c00); color: white; border: none; padding: 6px 14px; border-radius: 15px; font-weight: bold; cursor: pointer; }
+    .section-card { background: var(--card-bg); border-radius: 16px; padding: 15px; margin: 15px; border: 1px solid #1a383a; }
+    .balance-title { font-size: 14px; color: #a0aec0; }
+    .balance-amount { font-size: 32px; font-weight: bold; color: var(--text-main); margin: 5px 0; }
+    .sub-info { font-size: 13px; color: var(--accent-green); display: flex; gap: 10px; align-items: center; }
+    .grid-btn { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+    .action-btn { background: #00b471; color: white; border: none; padding: 12px; border-radius: 12px; font-weight: bold; font-size: 15px; text-align: center; cursor: pointer; }
+    .action-btn.secondary { background: #e91e63; }
+    
+    /* Tables & Lists */
+    .roi-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #1a383a; font-size: 14px; }
+    .trade-item { background: #0e1f21; border-radius: 10px; padding: 12px; margin-top: 10px; border: 1px solid #1a383a; }
+    .trade-header { display: flex; justify-content: space-between; font-weight: bold; font-size: 14px; margin-bottom: 5px; }
+    
+    /* Bottom Navigation */
+    .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #1a383a; }
+    .nav-item { text-align: center; color: #718096; font-size: 12px; cursor: pointer; background: none; border: none; }
+    .nav-item.active { color: var(--accent-green); }
+    .nav-item svg { width: 22px; height: 22px; fill: currentColor; margin-bottom: 2px; }
+    
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h2>Apex Terminal</h2>
-    <span>🟢 Live</span>
+
+  <!-- Top Status Bar -->
+  <div class="top-bar">
+    <div class="badge">👤 Affiliate marketer</div>
+    <div style="display: flex; gap: 10px; align-items: center;">
+      <span style="font-size: 13px;">Earned: 🟢 104.160</span>
+      <button class="btn-withdraw" onclick="alert('Redirecting to secure blockchain withdrawal portal...')">Withdraw ></button>
+    </div>
   </div>
 
-  <div class="card">
-    <div>Total Balance</div>
-    <div class="balance-amount" id="balance">$150.00 USDT</div>
+  <!-- TAB 1: HOME -->
+  <div id="tab-home" class="tab-content active">
+    <div class="section-card" style="text-align: center;">
+      <div class="balance-title">🔥 (USDT Trade Rights)</div>
+      <div class="balance-amount">₮ 80.000</div>
+      <div class="sub-info" style="justify-content: center;">
+        <span>Daily Earn: $17.360 (+21.70%)</span>
+      </div>
+      <div style="font-size: 12px; color: #a0aec0; margin-top: 5px;">Settlement time: 23:06:17</div>
+
+      <div class="grid-btn">
+        <button class="action-btn" onclick="alert('Top up wallet address generated.')">🔥 Top up</button>
+        <button class="action-btn secondary" onclick="switchTab('friends')">Refer & Earn</button>
+      </div>
+    </div>
+
+    <!-- AI Trading Status & ROI Tiers -->
+    <div class="section-card">
+      <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+        <button style="flex:1; background:#00b471; border:none; padding:8px; border-radius:8px; color:white; font-weight:bold;">Ai Trading status</button>
+        <button style="flex:1; background:#112527; border:1px solid #1a383a; padding:8px; border-radius:8px; color:#a0aec0;">USDT Trade Rights</button>
+      </div>
+
+      <div class="trade-item">
+        <div class="trade-header">
+          <span>ONDO/USDT <span style="color:#00b471; font-size:12px;">short x15</span></span>
+          <span style="color:#00b471;">130.11%</span>
+        </div>
+        <div style="font-size: 12px; color: #a0aec0; display: flex; justify-content: space-between;">
+          <span>Entry: 0.39042554</span>
+          <span>Latest: 0.35656000</span>
+        </div>
+      </div>
+
+      <div class="trade-item">
+        <div class="trade-header">
+          <span>ZRO/USDT <span style="color:#00b471; font-size:12px;">Long x20</span></span>
+          <span style="color:#00b471;">282.03%</span>
+        </div>
+        <div style="font-size: 12px; color: #a0aec0; display: flex; justify-content: space-between;">
+          <span>Entry: 0.72391600</span>
+          <span>Latest: 0.82600000</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3>AE (AI Energy) Return on Investment</h3>
+      <div class="roi-row"><span>≥ $1.000</span> <span style="color:var(--accent-green)">0.80%</span></div>
+      <div class="roi-row"><span>≥ $5.000</span> <span style="color:var(--accent-green)">20.30%</span></div>
+      <div class="roi-row"><span>≥ $50.000</span> <span style="color:var(--accent-green)">21.70%</span></div>
+      <div class="roi-row"><span>≥ $300.000</span> <span style="color:var(--accent-green)">23.10%</span></div>
+    </div>
   </div>
 
-  <div class="card">
-    <h3>Market Feed (USDT)</h3>
-    <div class="ticker"><span>BTC/USDT</span> <span id="btc-price" class="green">$64,210.00</span></div>
-    <div class="ticker"><span>ETH/USDT</span> <span id="eth-price" class="green">$3,450.50</span></div>
+  <!-- TAB 2: FRIENDS / REFERRAL -->
+  <div id="tab-friends" class="tab-content">
+    <div class="section-card">
+      <h2>Referral and Earn</h2>
+      <p style="font-size: 13px; color: #a0aec0;">Team bonus 14%: 5% return on Level 1 deposits, and 1% return on Levels 2 to 10 deposits.</p>
+      <div style="background: #0e1f21; padding: 12px; border-radius: 8px; border: 1px dashed #00b471; margin-top: 10px; font-size: 12px; word-break: break-all;">
+        https://t.me/USDT_AI_Trade_bot?start=invite_code_356669
+      </div>
+      <button class="action-btn" style="width:100%; margin-top:10px;" onclick="alert('Referral link copied to clipboard!')">Copy Link</button>
+    </div>
   </div>
 
-  <div class="card">
-    <h3>Automated Trading Bot</h3>
-    <p id="status-text">Status: Connected & Synchronizing...</p>
-    <button class="btn" onclick="toggleBot()" id="bot-btn">Pause Bot</button>
+  <!-- TAB 3: INTRODUCTION -->
+  <div id="tab-introduction" class="tab-content">
+    <div class="section-card">
+      <h2>AE Digital Technologies LLC</h2>
+      <p style="font-size: 13px; color: #a0aec0; line-height: 1.5;">
+        Officially launched on December 9, 2025. We redefine cryptocurrency trading with artificial intelligence. Our AI system runs automatically 24/7, executing intelligent trading signals (5x, 10x, 20x shorting/longing) to help you easily earn USDT.
+      </p>
+      <p style="font-size: 13px; color: #a0aec0;"><b>Proprietary AI Model:</b> Powered by the AI-HedgeTrade™ engine combined with ChatGPT-4 architecture for real-time sentiment analysis.</p>
+    </div>
+  </div>
+
+  <!-- TAB 4: TASKS -->
+  <div id="tab-task" class="tab-content">
+    <div class="section-card">
+      <h3>Complete tasks to get rewards</h3>
+      <div class="trade-item" style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <div style="font-weight: bold; font-size: 13px;">New user reward package</div>
+          <div style="font-size: 12px; color: var(--accent-green);">+ 0.01 USDT</div>
+        </div>
+        <button class="action-btn" style="padding: 6px 12px; font-size: 12px;">Claim</button>
+      </div>
+      <div class="trade-item" style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <div style="font-weight: bold; font-size: 13px;">Join our VIP channel</div>
+          <div style="font-size: 12px; color: var(--accent-green);">+ 0.50 USDT 🔥</div>
+        </div>
+        <button class="action-btn" style="padding: 6px 12px; font-size: 12px;">Join</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <div class="nav-bar">
+    <button class="nav-item active" onclick="switchTab('home')" id="nav-home">
+      <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      <div>Home</div>
+    </button>
+    <button class="nav-item" onclick="switchTab('friends')" id="nav-friends">
+      <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+      <div>Friends</div>
+    </button>
+    <button class="nav-item" onclick="switchTab('introduction')" id="nav-introduction">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+      <div>Introduction</div>
+    </button>
+    <button class="nav-item" onclick="switchTab('task')" id="nav-task">
+      <svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+      <div>Task</div>
+    </button>
   </div>
 
   <script>
-    let isRunning = true;
-    function toggleBot() {
-      isRunning = !isRunning;
-      const statusText = document.getElementById('status-text');
-      const btn = document.getElementById('bot-btn');
-      if(isRunning) {
-        statusText.innerText = 'Status: Connected & Synchronizing...';
-        btn.innerText = 'Pause Bot';
-        btn.style.background = '#4caf50';
-      } else {
-        statusText.innerText = 'Status: Paused by User';
-        btn.innerText = 'Resume Bot';
-        btn.style.background = '#ff9800';
-      }
+    function switchTab(tabName) {
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      
+      // Show selected tab
+      document.getElementById('tab-' + tabName).classList.add('active');
+      document.getElementById('nav-' + tabName).classList.add('active');
     }
-
-    // Simulate live price updates
-    setInterval(() => {
-      if(!isRunning) return;
-      let btc = 64200 + (Math.random() * 40 - 20);
-      let eth = 3450 + (Math.random() * 10 - 5);
-      document.getElementById('btc-price').innerText = '$' + btc.toFixed(2);
-      document.getElementById('eth-price').innerText = '$' + eth.toFixed(2);
-    }, 2000);
   </script>
 </body>
 </html>
